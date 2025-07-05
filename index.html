@@ -1,0 +1,67 @@
+# Chenkopofita.com
+<h1>Bienvenido a Chenkopofita.com</h1>
+<p>Selecciona el test que quieres hacer:</p>
+
+<button onclick="mostrarTest('madrid')">Bomberos Ayuntamiento de Madrid</button>
+<button onclick="mostrarTest('cadiz')">Consorcio Bomberos de Cádiz</button>
+
+<div id="contenedor-test"></div>
+
+<script>
+const tests = {
+  madrid: generarPreguntas("Madrid"),
+  cadiz: generarPreguntas("Cádiz"),
+};
+
+function generarPreguntas(nombre) {
+  const preguntas = [];
+  for (let i = 1; i <= 40; i++) {
+    preguntas.push({
+      texto: `(${nombre}) Pregunta ${i}: ¿Cuál es la respuesta correcta?`,
+      opciones: [
+        "Opción A",
+        "Opción B",
+        "Opción C",
+        "Opción D"
+      ],
+      correcta: 1 // la opción B (índice 1)
+    });
+  }
+  return preguntas;
+}
+
+function mostrarTest(tipo) {
+  const contenedor = document.getElementById('contenedor-test');
+  const preguntas = tests[tipo];
+  let html = `<h2>Test de ${tipo === 'madrid' ? 'Bomberos Ayuntamiento de Madrid' : 'Consorcio de Cádiz'}</h2>`;
+
+  preguntas.forEach((pregunta, index) => {
+    html += `<div style="margin-bottom:15px;">
+      <p><strong>${index + 1}.</strong> ${pregunta.texto}</p>
+      ${pregunta.opciones.map((op, i) =>
+        `<label><input type="radio" name="preg-${index}" value="${i}"> ${op}</label><br>`
+      ).join('')}
+    </div>`;
+  });
+
+  html += `<button onclick="corregir('${tipo}')">Corregir test</button>`;
+  html += `<div id="resultado" style="margin-top:20px;font-weight:bold;"></div>`;
+  contenedor.innerHTML = html;
+}
+
+function corregir(tipo) {
+  const preguntas = tests[tipo];
+  let aciertos = 0;
+
+  preguntas.forEach((pregunta, i) => {
+    const respuestas = document.getElementsByName(`preg-${i}`);
+    respuestas.forEach((r) => {
+      if (r.checked && parseInt(r.value) === pregunta.correcta) {
+        aciertos++;
+      }
+    });
+  });
+
+  document.getElementById('resultado').innerText = `Has acertado ${aciertos} de 40 preguntas.`;
+}
+</script>
