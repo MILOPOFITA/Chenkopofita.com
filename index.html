@@ -8,10 +8,16 @@ GENERAL CRAVCHENKO
 <style>
   body {
     margin: 0; font-family: 'Roboto', sans-serif;
-    background-color: #b30000; color: white;
+    background: linear-gradient(135deg, #8B0000, #2F0000);
+    color: white;
     display: flex; flex-direction: column; align-items: center;
     min-height: 100vh; padding: 2rem;
     transition: background 0.5s ease;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03), transparent 25%),
+      radial-gradient(circle at 80% 60%, rgba(255,255,255,0.03), transparent 25%);
+    background-repeat: repeat;
+    background-size: 200px 200px;
   }
   h1, h2, h3 { text-align: center; }
   .test-choice-btn {
@@ -86,39 +92,73 @@ GENERAL CRAVCHENKO
     transition: transform 0.2s;
   }
   button.button:hover { transform: scale(1.05); }
+
+  /* Formulario de solicitud acceso */
+  #requestAccess {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 100vh; color: white;
+  }
+  #requestAccess input[type=email] {
+    padding: 0.8rem; font-size: 1.1rem; border-radius: 8px; border: none; margin-bottom: 1rem; width: 280px;
+  }
+  #requestAccess button {
+    padding: 1rem 2rem; font-size: 1.2rem; border-radius: 12px; border: none; cursor: pointer;
+  }
 </style>
 </head>
 <body>
 
-<div id="menu">
-  <h1>ChenkoTests: Oposiciones Bombero</h1>
-  <p>Selecciona el tipo de test:</p>
-  <button class="test-choice-btn btn-madrid" onclick="selectTest('madrid')">Ayuntamiento de Madrid</button>
-  <button class="test-choice-btn btn-cadiz" onclick="selectTest('cadiz')">Consorcio de Cádiz</button>
+<!-- FORMULARIO DE SOLICITUD DE ACCESO -->
+<div id="requestAccess">
+  <h2>Solicitud de acceso a los tests</h2>
+  <p>Por favor, introduce tu correo para solicitar acceso:</p>
 
-  <div id="afterTestSelect" style="display:none; flex-direction: column; align-items: center; margin-top: 1rem;">
-    <p>¿Cuántas preguntas quieres responder? (1 - 5000)</p>
-    <input type="number" id="numQuestions" value="20" min="1" max="5000" />
-    <p id="modeSelection">Selecciona modo: 
-      <label><input type="radio" name="mode" value="exam" checked> Examen</label> 
-      <label><input type="radio" name="mode" value="review"> Repaso</label>
-    </p>
-    <button class="button" onclick="startTest()">Comenzar test</button>
-  </div>
+  <form action="https://formspree.io/f/tu_id_formspree" method="POST" style="display:flex; flex-direction: column; align-items:center;">
+    <input type="email" name="email" placeholder="tuemail@ejemplo.com" required />
+    <button type="submit">Enviar solicitud</button>
+  </form>
+
+  <p style="margin-top:2rem; font-size:0.9rem; opacity:0.8;">
+    Recibirás un email con instrucciones para acceder.
+  </p>
+
+  <button onclick="grantAccess()">Ya tengo acceso</button>
 </div>
 
-<div id="testSection" style="display:none;">
-  <h2 id="testTitle"></h2>
-  <div class="timer" id="timer"></div>
-  <div id="questionsContainer"></div>
-  <div id="explanation"></div>
-  <button class="button" onclick="submitTest()">Finalizar test</button>
-  <div id="result" style="display:none;"></div>
-  <button class="button" onclick="location.reload()">Reiniciar</button>
+<!-- CONTENIDO PRINCIPAL (Tests) -->
+<div id="app" style="display:none; flex-direction: column; align-items: center; width: 100%; max-width: 900px;">
+
+  <div id="menu">
+    <h1>ChenkoTests: Oposiciones Bombero</h1>
+    <p>Selecciona el tipo de test:</p>
+    <button class="test-choice-btn btn-madrid" onclick="selectTest('madrid')">Ayuntamiento de Madrid</button>
+    <button class="test-choice-btn btn-cadiz" onclick="selectTest('cadiz')">Consorcio de Cádiz</button>
+
+    <div id="afterTestSelect" style="display:none; flex-direction: column; align-items: center; margin-top: 1rem;">
+      <p>¿Cuántas preguntas quieres responder? (1 - 5000)</p>
+      <input type="number" id="numQuestions" value="20" min="1" max="5000" />
+      <p id="modeSelection">Selecciona modo: 
+        <label><input type="radio" name="mode" value="exam" checked> Examen</label> 
+        <label><input type="radio" name="mode" value="review"> Repaso</label>
+      </p>
+      <button class="button" onclick="startTest()">Comenzar test</button>
+    </div>
+  </div>
+
+  <div id="testSection" style="display:none;">
+    <h2 id="testTitle"></h2>
+    <div class="timer" id="timer"></div>
+    <div id="questionsContainer"></div>
+    <div id="explanation"></div>
+    <button class="button" onclick="submitTest()">Finalizar test</button>
+    <div id="result" style="display:none;"></div>
+    <button class="button" onclick="location.reload()">Reiniciar</button>
+  </div>
+
 </div>
 
 <script>
-  // Ejemplo reducido de preguntas con explicaciones para el modo repaso
+  // PREGUNTAS DE EJEMPLO CON EXPLICACIONES
   const preguntasMadrid = [
     {
       q: "¿Cuál es el color de la manguera tipo 1?",
@@ -131,6 +171,12 @@ GENERAL CRAVCHENKO
       options: ["Cuerda dinámica", "Casco básico", "Extintor de CO₂"],
       correct: 0,
       explanation: "La cuerda dinámica es esencial para rescates en altura por su elasticidad."
+    },
+    {
+      q: "¿Cuál es la presión máxima recomendada en una manguera?",
+      options: ["10 bar", "15 bar", "20 bar"],
+      correct: 2,
+      explanation: "La presión máxima recomendada suele ser 20 bar para evitar daños."
     }
   ];
 
@@ -146,16 +192,31 @@ GENERAL CRAVCHENKO
       options: ["Extinción de incendios", "Rescate en altura", "Ventilación de humos", "Primeros auxilios"],
       correct: 1,
       explanation: "El equipo autoescala se utiliza para rescates en altura y acceso a lugares elevados."
+    },
+    {
+      q: "¿Cuál es el color típico del casco para bomberos en Cádiz?",
+      options: ["Blanco", "Rojo", "Amarillo", "Negro"],
+      correct: 2,
+      explanation: "El casco amarillo es típico para bomberos en Cádiz."
     }
   ];
 
+  // Variables globales
   let currentTestType = null;
   let currentQuestions = [];
-  let currentMode = 'exam'; // 'exam' or 'review'
+  let currentMode = 'exam'; // 'exam' o 'review'
   let currentQuestionIndex = 0;
   let score = 0;
   let timeLeft = 0;
   let timerInterval;
+
+  // FUNCIONES
+
+  function grantAccess() {
+    document.getElementById('requestAccess').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    document.body.style.backgroundColor = '#b30000'; // Puedes ajustar o dejar el degradado
+  }
 
   function selectTest(testType) {
     currentTestType = testType;
@@ -174,18 +235,21 @@ GENERAL CRAVCHENKO
     currentMode = modeRadio ? modeRadio.value : 'exam';
 
     const allQuestions = currentTestType === 'madrid' ? preguntasMadrid : preguntasCadiz;
-    currentQuestions = allQuestions.slice(0, numQ);
+
+    // En caso de que pidan más preguntas que disponibles, ajustamos:
+    const maxAvailable = allQuestions.length;
+    currentQuestions = allQuestions.slice(0, Math.min(numQ, maxAvailable));
 
     currentQuestionIndex = 0;
     score = 0;
-    timeLeft = numQ * 30;
+    timeLeft = currentQuestions.length * 30;
 
     document.getElementById('menu').style.display = 'none';
     document.getElementById('testSection').style.display = 'block';
     document.getElementById('result').style.display = 'none';
     document.getElementById('explanation').innerHTML = '';
     document.body.style.backgroundColor = currentTestType === 'madrid' ? '#003366' : '#FFDD00';
-    document.getElementById('testTitle').textContent = `Test ${currentTestType === 'madrid' ? 'Madrid' : 'Cádiz'} - Pregunta 1 de ${numQ}`;
+    document.getElementById('testTitle').textContent = `Test ${currentTestType === 'madrid' ? 'Madrid' : 'Cádiz'} - Pregunta 1 de ${currentQuestions.length}`;
 
     startTimer();
     showQuestion();
@@ -227,13 +291,11 @@ GENERAL CRAVCHENKO
     const qObj = currentQuestions[currentQuestionIndex];
     const labels = document.querySelectorAll('.option-label');
     
-    // Modo examen: solo avanzamos sin mostrar nada
     if(currentMode === 'exam') {
       if(selectedIndex === qObj.correct) score++;
       nextQuestion();
     }
     else if(currentMode === 'review') {
-      // Modo repaso: marcamos colores y mostramos explicación
       labels.forEach((label, idx) => {
         label.classList.remove('correct', 'incorrect');
         if(idx === qObj.correct) label.classList.add('correct');
@@ -247,7 +309,6 @@ GENERAL CRAVCHENKO
       const inputs = document.querySelectorAll('input[name="answer"]');
       inputs.forEach(i => i.disabled = true);
 
-      // Pasar a la siguiente pregunta tras 2 segundos
       setTimeout(nextQuestion, 2000);
     }
   }
@@ -283,7 +344,6 @@ GENERAL CRAVCHENKO
 
     // Mostrar botón reiniciar
     document.querySelector('button[onclick="location.reload()"]').style.display = 'block';
-
   }
 </script>
 
