@@ -5,11 +5,7 @@ GENERAL CRAVCHENKO
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ChenkoTests: Oposiciones Bombero</title>
-
-  <!-- Fuente -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-
-  <!-- Estilos -->
   <style>
     :root {
       --color-primary: #b30000;
@@ -17,31 +13,39 @@ GENERAL CRAVCHENKO
       --color-cadiz: #FFDD00;
       --radius: 12px;
       --shadow: 0 4px 12px rgba(0,0,0,0.2);
+      --bg-light: #f0f0f0;
+      --text-light: #222;
+      --bg-dark: #1e1e1e;
+      --text-dark: #eee;
     }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-
     body {
       font-family: 'Roboto', sans-serif;
-      background-color: var(--color-primary);
-      color: white;
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 2rem;
-      transition: background-color 0.5s ease;
+      transition: all 0.5s ease;
     }
-
+    .dark {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+    .light {
+      background-color: var(--bg-light);
+      color: var(--text-light);
+    }
     header {
       text-align: center;
       margin-bottom: 2rem;
     }
-
     .btn-choice {
       font-size: 1.4rem;
       font-weight: bold;
@@ -54,19 +58,15 @@ GENERAL CRAVCHENKO
       width: 250px;
       transition: transform 0.2s ease;
     }
-
     .btn-madrid { background-color: var(--color-madrid); }
     .btn-cadiz { background-color: var(--color-cadiz); }
-
     .btn-choice:hover {
       transform: scale(1.05);
     }
-
     .form-group {
       margin: 1rem 0;
       text-align: center;
     }
-
     input[type="number"] {
       width: 100px;
       padding: 0.5rem;
@@ -74,11 +74,9 @@ GENERAL CRAVCHENKO
       font-size: 1.1rem;
       margin-top: 0.5rem;
     }
-
     label.radio-label {
       margin: 0 0.5rem;
     }
-
     .question-box {
       background: white;
       color: black;
@@ -87,7 +85,6 @@ GENERAL CRAVCHENKO
       margin-bottom: 1rem;
       box-shadow: var(--shadow);
     }
-
     .option-label {
       display: block;
       padding: 0.5rem;
@@ -97,21 +94,17 @@ GENERAL CRAVCHENKO
       border: 1px solid #ccc;
       user-select: none;
     }
-
     .option-label:hover {
       background: #eee;
     }
-
     .correct {
       background-color: #b6f2b6 !important;
       border-color: #0a0;
     }
-
     .incorrect {
       background-color: #f2b6b6 !important;
       border-color: #a00;
     }
-
     .timer {
       font-size: 1.5rem;
       font-weight: bold;
@@ -119,7 +112,6 @@ GENERAL CRAVCHENKO
       color: white;
       text-align: center;
     }
-
     #explanation {
       background: #f9f9f9;
       color: #222;
@@ -128,7 +120,6 @@ GENERAL CRAVCHENKO
       margin-top: 1rem;
       font-style: italic;
     }
-
     #result {
       font-size: 1.3rem;
       margin-top: 1rem;
@@ -136,7 +127,6 @@ GENERAL CRAVCHENKO
       font-weight: bold;
       text-align: center;
     }
-
     .button-main {
       background-color: #fff;
       color: #000;
@@ -150,45 +140,50 @@ GENERAL CRAVCHENKO
       max-width: 300px;
       transition: transform 0.2s;
     }
-
     .button-main:hover {
       transform: scale(1.05);
     }
-
     @media (max-width: 600px) {
       .btn-choice {
         width: 90%;
       }
     }
+    #toggleThemeBtn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: #333;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
   </style>
 </head>
-<body>
+<body class="dark">
+  <button id="toggleThemeBtn">Modo Claro</button>
 
   <header>
     <h1>ChenkoTests: Oposiciones Bombero</h1>
     <p>Elige el tipo de test y comienza a prepararte</p>
   </header>
-
   <main id="menu">
     <p>Selecciona el tipo de test:</p>
     <button class="btn-choice btn-madrid" onclick="selectTest('madrid')">Ayuntamiento de Madrid</button>
     <button class="btn-choice btn-cadiz" onclick="selectTest('cadiz')">Consorcio de Cádiz</button>
-
     <div id="afterTestSelect" style="display:none;">
       <div class="form-group">
         <label for="numQuestions">¿Cuántas preguntas quieres responder? (1 - 5000)</label><br/>
         <input type="number" id="numQuestions" value="20" min="1" max="5000" />
       </div>
-
       <div class="form-group">
         <label><input type="radio" name="mode" value="exam" checked> Modo Examen</label>
         <label><input type="radio" name="mode" value="review"> Modo Repaso</label>
       </div>
-
       <button class="button-main" onclick="startTest()">Comenzar Test</button>
     </div>
   </main>
-
   <section id="testSection" style="display:none;">
     <h2 id="testTitle"></h2>
     <div class="timer" id="timer"></div>
@@ -196,40 +191,25 @@ GENERAL CRAVCHENKO
     <div id="explanation"></div>
     <button class="button-main" onclick="submitTest()">Finalizar Test</button>
     <div id="result" style="display:none;"></div>
-    <button class="button-main" onclick="location.reload()" style="display:none;" id="restartBtn">Reiniciar</button>
+    <button class="button-main" onclick="restartTest()" style="display:none;" id="restartBtn">Reiniciar</button>
   </section>
 
   <script>
-    // Preguntas de ejemplo (pueden cargarse desde JSON o API)
-    const preguntasMadrid = [
-      {
-        q: "¿Cuál es el color de la manguera tipo 1?",
-        options: ["Rojo", "Negro", "Azul"],
-        correct: 1,
-        explanation: "La manguera tipo 1 se identifica con el color negro para distinguirla en el equipo."
-      },
-      {
-        q: "¿Qué equipo se usa para rescates en altura?",
-        options: ["Cuerda dinámica", "Casco básico", "Extintor de CO₂"],
-        correct: 0,
-        explanation: "La cuerda dinámica es esencial para rescates en altura por su elasticidad."
+    const toggleThemeBtn = document.getElementById("toggleThemeBtn");
+    let currentTheme = "dark";
+    toggleThemeBtn.addEventListener("click", () => {
+      if (currentTheme === "dark") {
+        document.body.classList.remove("dark");
+        document.body.classList.add("light");
+        toggleThemeBtn.textContent = "Modo Oscuro";
+        currentTheme = "light";
+      } else {
+        document.body.classList.remove("light");
+        document.body.classList.add("dark");
+        toggleThemeBtn.textContent = "Modo Claro";
+        currentTheme = "dark";
       }
-    ];
-
-    const preguntasCadiz = [
-      {
-        q: "¿Qué agente se usa para fuegos tipo B?",
-        options: ["CO₂", "Agua", "Espuma", "Polvo seco"],
-        correct: 2,
-        explanation: "La espuma es el agente más efectivo para fuegos tipo B que involucran líquidos inflamables."
-      },
-      {
-        q: "¿Cuál es la función del equipo autoescala?",
-        options: ["Extinción de incendios", "Rescate en altura", "Ventilación de humos", "Primeros auxilios"],
-        correct: 1,
-        explanation: "El equipo autoescala se utiliza para rescates en altura y acceso a lugares elevados."
-      }
-    ];
+    });
 
     let currentTestType = null;
     let currentQuestions = [];
@@ -239,31 +219,35 @@ GENERAL CRAVCHENKO
     let timeLeft = 0;
     let timerInterval;
 
-    function selectTest(testType) {
+    async function selectTest(testType) {
       currentTestType = testType;
       document.body.style.backgroundColor = testType === 'madrid' ? '#003366' : '#FFDD00';
       document.getElementById('afterTestSelect').style.display = 'block';
     }
 
-    function startTest() {
+    async function startTest() {
       const numQ = parseInt(document.getElementById('numQuestions').value);
       if (isNaN(numQ) || numQ < 1 || numQ > 5000) {
         alert('Introduce un número válido entre 1 y 5000.');
         return;
       }
-
       currentMode = document.querySelector('input[name="mode"]:checked').value;
-      const allQuestions = currentTestType === 'madrid' ? preguntasMadrid : preguntasCadiz;
-      currentQuestions = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0, numQ);
-
+      try {
+        const response = await fetch(`${currentTestType}.json`);
+        if (!response.ok) throw new Error("Error al cargar las preguntas.");
+        const data = await response.json();
+        currentQuestions = [...data].sort(() => 0.5 - Math.random()).slice(0, numQ);
+      } catch (err) {
+        alert("No se pudieron cargar las preguntas. Inténtalo más tarde.");
+        console.error(err);
+        return;
+      }
       currentQuestionIndex = 0;
       score = 0;
       timeLeft = numQ * 30;
-
       document.getElementById('menu').style.display = 'none';
       document.getElementById('testSection').style.display = 'block';
       document.getElementById('testTitle').textContent = `Test ${currentTestType === 'madrid' ? 'Madrid' : 'Cádiz'} - Pregunta 1 de ${numQ}`;
-
       startTimer();
       showQuestion();
     }
@@ -286,7 +270,6 @@ GENERAL CRAVCHENKO
       const container = document.getElementById('questionsContainer');
       const qObj = currentQuestions[currentQuestionIndex];
       let optionsHTML = '';
-
       qObj.options.forEach((opt, i) => {
         optionsHTML += `
           <label class="option-label" onclick="selectAnswer(${i})">
@@ -294,7 +277,6 @@ GENERAL CRAVCHENKO
             ${opt}
           </label>`;
       });
-
       container.innerHTML = `<div class="question-box"><h3>${currentQuestionIndex + 1}. ${qObj.q}</h3>${optionsHTML}</div>`;
       document.getElementById('explanation').innerHTML = '';
     }
@@ -302,11 +284,9 @@ GENERAL CRAVCHENKO
     function selectAnswer(selectedIndex) {
       const qObj = currentQuestions[currentQuestionIndex];
       const labels = document.querySelectorAll('.option-label');
-
       labels.forEach((label, idx) => {
         label.classList.remove('correct', 'incorrect');
       });
-
       if (currentMode === 'exam') {
         if (selectedIndex === qObj.correct) score++;
         nextQuestion();
@@ -318,9 +298,7 @@ GENERAL CRAVCHENKO
           labels[selectedIndex].classList.add('incorrect');
           labels[qObj.correct].classList.add('correct');
         }
-
         document.getElementById('explanation').textContent = qObj.explanation;
-
         setTimeout(nextQuestion, 2000);
       }
     }
@@ -341,16 +319,23 @@ GENERAL CRAVCHENKO
       document.getElementById('explanation').innerHTML = '';
       document.getElementById('timer').textContent = '';
       document.getElementById('testTitle').textContent = 'Resultado final';
-
       const total = currentQuestions.length;
       const percent = Math.round((score / total) * 100);
       const resultDiv = document.getElementById('result');
       resultDiv.textContent = `Has acertado ${score} de ${total} preguntas (${percent}%).`;
       resultDiv.style.color = percent >= 80 ? '#00ff99' : percent >= 50 ? '#ffcc00' : '#ff5555';
       resultDiv.style.display = 'block';
-
       document.getElementById('restartBtn').style.display = 'block';
+    }
+
+    function restartTest() {
+      document.getElementById('menu').style.display = 'block';
+      document.getElementById('testSection').style.display = 'none';
+      document.getElementById('result').style.display = 'none';
+      document.getElementById('restartBtn').style.display = 'none';
+      document.getElementById('afterTestSelect').style.display = 'none';
+      document.body.style.backgroundColor = 'var(--color-primary)';
     }
   </script>
 </body>
-</html> 
+</html>
