@@ -65,3 +65,206 @@ function corregir(tipo) {
   document.getElementById('resultado').innerText = `Has acertado ${aciertos} de 40 preguntas.`;
 }
 </script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Chenkopofita | Tests Bomberos</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    textarea {
+      width: 100%;
+      height: 300px;
+      margin-bottom: 15px;
+    }
+    button {
+      margin: 10px 5px 10px 0;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .pregunta {
+      margin-bottom: 15px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 10px;
+    }
+    #inputZona, #zona-test {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Tests de Bomberos | Chenkopofita.com</h1>
+  <p>Selecciona la oposición:</p>
+
+  <button onclick="seleccionarTest('madrid')">🧯 Ayuntamiento de Madrid</button>
+  <button onclick="seleccionarTest('cadiz')">🚒 Consorcio de Cádiz</button>
+
+  <div id="inputZona" style="display:none;">
+    <h2 id="tituloTest"></h2>
+    <p>Pega tus preguntas en este formato (usa A), B), C), D) y RESPUESTA: X):</p>
+    <textarea id="inputPreguntas" placeholder="¿Pregunta 1?\nA) Opción 1\nB) Opción 2\nC) Opción 3\nD) Opción 4\nRESPUESTA: A"></textarea><br>
+    <button onclick="generarTestDesdeTexto()">Generar Test</button>
+    <div style="margin-top:10px;">
+      ⏱️ Tiempo restante: <span id="tiempo">15:00</span>  
+      <span id="mejorResultado" style="float:right;"></span>
+    </div>
+  </div>
+
+  <div id="zona-test"></div>
+
+  <script>
+    let tiempo = 900;
+    let intervalo;
+    let preguntasGlobal = [];
+    let testActual = ""; // madrid o cadiz
+
+    function seleccionarTest(tipo) {
+      testActual = tipo;
+      document.getElementById("inputZona").style.display = "block";
+      document.getElementById("zona-test").innerHTML = "";
+      document.getElementById("inputPreguntas").value = "";
+      document.getElementById("tituloTest").innerText =
+        tipo === 'madrid'
+          ? "🧯 Test Bombero Especialista Ayuntamiento de Madrid"
+          : "🚒 Test Consorcio de Bomberos de Cádiz";
+    }
+
+    function generarTestDesdeTexto() {
+      clearInterval(intervalo);
+      tiempo = 900;
+      actualizarTemporizador();
+      intervalo = setInterval(() => {
+        tiempo--;
+        actualizarTemporizador();
+        if (tiempo <= 0) {
+          clearInterval(intervalo);
+          corregir(preguntasGlobal, true);
+        }
+      }, 1000);
+
+      const texto = document.getElementById('inputPreguntas').value.trim();
+      const bloques = texto.split(/\n(?=\¿)/);
+      let preguntas = bloques.map(bloque => {
+        const lineas = bloque.trim().split('\n');
+        const textoPregunta = lineas[0];
+        const opciones = lineas.slice(1, 5).map(op => op.slice(3).trim());
+        const letraCorrecta = lineas.find(l => l.toUpperCase().startsWith('RESPUESTA:')).split(':')[1].trim().toUpperCase();
+        const indiceCorrecto = {A: 0, B: 1, C: 2, D: 3}[letraCorrecta] ?? 0;
+        return { texto: textoPregunta, opciones, correcta: indiceCorrecto };
+      });
+
+      preguntas = barajarArray(preguntas);
+      preguntasGlobal = preguntas;
+      mostrarPreguntas(preguntas);
+    }
+
+    function barajarArray(array) {
+      return array
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+    }
+
+    function actualizarTemporizador() {
+      const min = String(Math.floor(tiempo / 60)).padStart(2, '0');
+      const sec = String(tiempo % 60).padStart(2, '0');
+      document.getElementById("tiempo").innerText = `${min}:${sec}`;
+    }
+
+    function mostrarPreguntas(preguntas) {
+      const contenedor = document.getElementById('zona-test');
+      let html = '<h3>Test generado</h3>';
+
+      preguntas.forEach((pregunta, index) => {
+        html += `<div class="pregunta">
+          <p><strong>${index + 1}.</strong> ${pregunta.texto}</p>
+          ${pregunta.opciones.map((op, i) =>
+            `<label><input type="radio" name="preg-${index}" value="${i}"> ${op}</label><br>`
+          ).join('')}
+        </div>`;
+      });
+
+      html += `<button onclick='corregir(preguntasGlobal)'>Corregir Test</button>`;
+      html += `<button onclick='exportarPDF()'>Exportar a PDF</button>`;
+      html += `<div id="resultado" style="margin-top:20px; font-weight:bold;"></div>`;
+      contenedor.innerHTML = html;
+
+      mostrarRanking();
+    }
+
+    function corregir(preguntas, forzado = false) {
+      clearInterval(intervalo);
+      let aciertos = 0;
+
+      preguntas.forEach((pregunta, i) => {
+        const respuestas = document.getElementsByName(`preg-${i}`);
+        respuestas.forEach((r) => {
+          if (r.checked && parseInt(r.value) === pregunta.correcta) {
+            aciertos++;
+          }
+        });
+      });
+
+      const resultadoTexto = `✅ Has acertado ${aciertos} de ${preguntas.length} preguntas en ${formatoTiempo(900 - tiempo)}.`;
+      document.getElementById('resultado').innerText = resultadoTexto;
+      if (!forzado) guardarEnRanking(aciertos, preguntas.length);
+    }
+
+    function formatoTiempo(segundos) {
+      const min = String(Math.floor(segundos / 60)).padStart(2, '0');
+      const sec = String(segundos % 60).padStart(2, '0');
+      return `${min}:${sec}`;
+    }
+
+    function exportarPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(12);
+      doc.text(`Resultado del Test - ${testActual === 'madrid' ? 'Madrid' : 'Cádiz'}`, 10, 10);
+
+      preguntasGlobal.forEach((p, i) => {
+        let y = 20 + i * 10;
+        if (y > 270) {
+          doc.addPage();
+          y = 20;
+        }
+        doc.text(`${i + 1}. ${p.texto.substring(0, 90)}`, 10, y);
+        p.opciones.forEach((op, j) => {
+          let prefijo = ["A", "B", "C", "D"][j];
+          let marc = (p.correcta === j ? "✔️ " : "");
+          doc.text(`${marc}${prefijo}) ${op}`, 15, y + (j + 1) * 5);
+        });
+      });
+
+      doc.save(`test_${testActual}.pdf`);
+    }
+
+    function guardarEnRanking(aciertos, total) {
+      const clave = `mejorResultado_${testActual}`;
+      const anterior = localStorage.getItem(clave);
+      const porcentaje = Math.round((aciertos / total) * 100);
+      if (!anterior || porcentaje > parseInt(anterior)) {
+        localStorage.setItem(clave, porcentaje);
+      }
+      mostrarRanking();
+    }
+
+    function mostrarRanking() {
+      const clave = `mejorResultado_${testActual}`;
+      const mejor = localStorage.getItem(clave);
+      if (mejor) {
+        document.getElementById("mejorResultado").innerText = `🏆 Mejor resultado en ${testActual === 'madrid' ? 'Madrid' : 'Cádiz'}: ${mejor}%`;
+      }
+    }
+  </script>
+
+</body>
+</html>
