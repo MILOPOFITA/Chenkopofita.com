@@ -2,290 +2,355 @@ GENERAL CRAVCHENKO
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Chenko Tests Avanzado</title>
-<style>
-  body {
-    margin: 0; font-family: 'Roboto', sans-serif;
-    background-color: #b30000; color: white;
-    display: flex; flex-direction: column; align-items: center;
-    min-height: 100vh; padding: 2rem;
-    transition: background 0.5s ease;
-  }
-  h1, h2, h3 { text-align: center; }
-  .test-choice-btn {
-    font-size: 1.4rem;
-    font-weight: bold;
-    padding: 1rem 2rem;
-    margin: 1rem;
-    border-radius: 12px;
-    cursor: pointer;
-    border: none;
-    color: black;
-    width: 250px;
-    transition: transform 0.2s ease;
-  }
-  .btn-madrid { background-color: #003366; }
-  .btn-cadiz { background-color: #FFDD00; }
-  .test-choice-btn:hover { transform: scale(1.05); }
-  #menu { display: flex; flex-direction: column; align-items: center; }
-  #modeSelection {
-    margin: 1rem 0;
-    font-size: 1.1rem;
-  }
-  input[type=number] {
-    width: 100px; padding: 0.5rem; border-radius: 8px; font-size: 1.1rem;
-    margin-bottom: 1rem;
-  }
-  #testSection { max-width: 800px; width: 100%; margin-top: 1rem; }
-  .question-box {
-    background-color: white; color: black;
-    padding: 1rem; border-radius: 10px; margin-bottom: 1rem;
-  }
-  .option-label {
-    display: block;
-    padding: 0.5rem;
-    margin: 0.4rem 0;
-    border-radius: 8px;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    user-select: none;
-  }
-  .option-label:hover { background: #eee; }
-  .correct { background-color: #b6f2b6 !important; border-color: #0a0; }
-  .incorrect { background-color: #f2b6b6 !important; border-color: #a00; }
-  .timer {
-    font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem; color: white;
-  }
-  #explanation {
-    background: #f9f9f9;
-    color: #222;
-    padding: 1rem;
-    border-radius: 10px;
-    margin-top: 1rem;
-    font-style: italic;
-  }
-  #result {
-    font-size: 1.3rem;
-    margin-top: 1rem;
-    color: white;
-    font-weight: bold;
-  }
-  button.button {
-    background-color: #fff;
-    color: #000;
-    border: none;
-    padding: 1rem 2rem;
-    margin: 1rem auto;
-    font-size: 1.2rem;
-    cursor: pointer;
-    border-radius: 12px;
-    display: block;
-    max-width: 300px;
-    transition: transform 0.2s;
-  }
-  button.button:hover { transform: scale(1.05); }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ChenkoTests: Oposiciones Bombero</title>
+
+  <!-- Fuente -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <style>
+    :root {
+      --color-primary: #b30000;
+      --color-madrid: #003366;
+      --color-cadiz: #FFDD00;
+      --radius: 12px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--color-primary);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      transition: background-color 0.5s ease;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .btn-choice {
+      font-size: 1.4rem;
+      font-weight: bold;
+      padding: 1rem 2rem;
+      margin: 1rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      border: none;
+      color: black;
+      width: 250px;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-madrid { background-color: var(--color-madrid); }
+    .btn-cadiz { background-color: var(--color-cadiz); }
+
+    .btn-choice:hover {
+      transform: scale(1.05);
+    }
+
+    .form-group {
+      margin: 1rem 0;
+      text-align: center;
+    }
+
+    input[type="number"] {
+      width: 100px;
+      padding: 0.5rem;
+      border-radius: var(--radius);
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+    }
+
+    label.radio-label {
+      margin: 0 0.5rem;
+    }
+
+    .question-box {
+      background: white;
+      color: black;
+      padding: 1rem;
+      border-radius: var(--radius);
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .option-label {
+      display: block;
+      padding: 0.5rem;
+      margin: 0.4rem 0;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      user-select: none;
+    }
+
+    .option-label:hover {
+      background: #eee;
+    }
+
+    .correct {
+      background-color: #b6f2b6 !important;
+      border-color: #0a0;
+    }
+
+    .incorrect {
+      background-color: #f2b6b6 !important;
+      border-color: #a00;
+    }
+
+    .timer {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      color: white;
+      text-align: center;
+    }
+
+    #explanation {
+      background: #f9f9f9;
+      color: #222;
+      padding: 1rem;
+      border-radius: var(--radius);
+      margin-top: 1rem;
+      font-style: italic;
+    }
+
+    #result {
+      font-size: 1.3rem;
+      margin-top: 1rem;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .button-main {
+      background-color: #fff;
+      color: #000;
+      border: none;
+      padding: 1rem 2rem;
+      margin: 1rem auto;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border-radius: var(--radius);
+      display: block;
+      max-width: 300px;
+      transition: transform 0.2s;
+    }
+
+    .button-main:hover {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 600px) {
+      .btn-choice {
+        width: 90%;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div id="menu">
-  <h1>ChenkoTests: Oposiciones Bombero</h1>
-  <p>Selecciona el tipo de test:</p>
-  <button class="test-choice-btn btn-madrid" onclick="selectTest('madrid')">Ayuntamiento de Madrid</button>
-  <button class="test-choice-btn btn-cadiz" onclick="selectTest('cadiz')">Consorcio de Cádiz</button>
+  <header>
+    <h1>ChenkoTests: Oposiciones Bombero</h1>
+    <p>Elige el tipo de test y comienza a prepararte</p>
+  </header>
 
-  <div id="afterTestSelect" style="display:none; flex-direction: column; align-items: center; margin-top: 1rem;">
-    <p>¿Cuántas preguntas quieres responder? (1 - 5000)</p>
-    <input type="number" id="numQuestions" value="20" min="1" max="5000" />
-    <p id="modeSelection">Selecciona modo: 
-      <label><input type="radio" name="mode" value="exam" checked> Examen</label> 
-      <label><input type="radio" name="mode" value="review"> Repaso</label>
-    </p>
-    <button class="button" onclick="startTest()">Comenzar test</button>
-  </div>
-</div>
+  <main id="menu">
+    <p>Selecciona el tipo de test:</p>
+    <button class="btn-choice btn-madrid" onclick="selectTest('madrid')">Ayuntamiento de Madrid</button>
+    <button class="btn-choice btn-cadiz" onclick="selectTest('cadiz')">Consorcio de Cádiz</button>
 
-<div id="testSection" style="display:none;">
-  <h2 id="testTitle"></h2>
-  <div class="timer" id="timer"></div>
-  <div id="questionsContainer"></div>
-  <div id="explanation"></div>
-  <button class="button" onclick="submitTest()">Finalizar test</button>
-  <div id="result" style="display:none;"></div>
-  <button class="button" onclick="location.reload()">Reiniciar</button>
-</div>
+    <div id="afterTestSelect" style="display:none;">
+      <div class="form-group">
+        <label for="numQuestions">¿Cuántas preguntas quieres responder? (1 - 5000)</label><br/>
+        <input type="number" id="numQuestions" value="20" min="1" max="5000" />
+      </div>
 
-<script>
-  // Ejemplo reducido de preguntas con explicaciones para el modo repaso
-  const preguntasMadrid = [
-    {
-      q: "¿Cuál es el color de la manguera tipo 1?",
-      options: ["Rojo", "Negro", "Azul"],
-      correct: 1,
-      explanation: "La manguera tipo 1 se identifica con el color negro para distinguirla en el equipo."
-    },
-    {
-      q: "¿Qué equipo se usa para rescates en altura?",
-      options: ["Cuerda dinámica", "Casco básico", "Extintor de CO₂"],
-      correct: 0,
-      explanation: "La cuerda dinámica es esencial para rescates en altura por su elasticidad."
-    }
-  ];
+      <div class="form-group">
+        <label><input type="radio" name="mode" value="exam" checked> Modo Examen</label>
+        <label><input type="radio" name="mode" value="review"> Modo Repaso</label>
+      </div>
 
-  const preguntasCadiz = [
-    {
-      q: "¿Qué agente se usa para fuegos tipo B?",
-      options: ["CO₂", "Agua", "Espuma", "Polvo seco"],
-      correct: 2,
-      explanation: "La espuma es el agente más efectivo para fuegos tipo B que involucran líquidos inflamables."
-    },
-    {
-      q: "¿Cuál es la función del equipo autoescala?",
-      options: ["Extinción de incendios", "Rescate en altura", "Ventilación de humos", "Primeros auxilios"],
-      correct: 1,
-      explanation: "El equipo autoescala se utiliza para rescates en altura y acceso a lugares elevados."
-    }
-  ];
+      <button class="button-main" onclick="startTest()">Comenzar Test</button>
+    </div>
+  </main>
 
-  let currentTestType = null;
-  let currentQuestions = [];
-  let currentMode = 'exam'; // 'exam' or 'review'
-  let currentQuestionIndex = 0;
-  let score = 0;
-  let timeLeft = 0;
-  let timerInterval;
+  <section id="testSection" style="display:none;">
+    <h2 id="testTitle"></h2>
+    <div class="timer" id="timer"></div>
+    <div id="questionsContainer"></div>
+    <div id="explanation"></div>
+    <button class="button-main" onclick="submitTest()">Finalizar Test</button>
+    <div id="result" style="display:none;"></div>
+    <button class="button-main" onclick="location.reload()" style="display:none;" id="restartBtn">Reiniciar</button>
+  </section>
 
-  function selectTest(testType) {
-    currentTestType = testType;
-    document.getElementById('menu').style.backgroundColor = testType === 'madrid' ? '#003366' : '#FFDD00';
-    document.getElementById('afterTestSelect').style.display = 'flex';
-  }
-
-  function startTest() {
-    const numQ = parseInt(document.getElementById('numQuestions').value);
-    if (isNaN(numQ) || numQ < 1 || numQ > 5000) {
-      alert('Introduce un número válido de preguntas entre 1 y 5000.');
-      return;
-    }
-
-    const modeRadio = document.querySelector('input[name="mode"]:checked');
-    currentMode = modeRadio ? modeRadio.value : 'exam';
-
-    const allQuestions = currentTestType === 'madrid' ? preguntasMadrid : preguntasCadiz;
-    currentQuestions = allQuestions.slice(0, numQ);
-
-    currentQuestionIndex = 0;
-    score = 0;
-    timeLeft = numQ * 30;
-
-    document.getElementById('menu').style.display = 'none';
-    document.getElementById('testSection').style.display = 'block';
-    document.getElementById('result').style.display = 'none';
-    document.getElementById('explanation').innerHTML = '';
-    document.body.style.backgroundColor = currentTestType === 'madrid' ? '#003366' : '#FFDD00';
-    document.getElementById('testTitle').textContent = `Test ${currentTestType === 'madrid' ? 'Madrid' : 'Cádiz'} - Pregunta 1 de ${numQ}`;
-
-    startTimer();
-    showQuestion();
-  }
-
-  function startTimer() {
-    clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-      timeLeft--;
-      const minutes = Math.floor(timeLeft / 60);
-      const seconds = timeLeft % 60;
-      document.getElementById('timer').textContent = `Tiempo restante: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-      if (timeLeft <= 0) {
-        clearInterval(timerInterval);
-        submitTest();
+  <script>
+    // Preguntas de ejemplo (pueden cargarse desde JSON o API)
+    const preguntasMadrid = [
+      {
+        q: "¿Cuál es el color de la manguera tipo 1?",
+        options: ["Rojo", "Negro", "Azul"],
+        correct: 1,
+        explanation: "La manguera tipo 1 se identifica con el color negro para distinguirla en el equipo."
+      },
+      {
+        q: "¿Qué equipo se usa para rescates en altura?",
+        options: ["Cuerda dinámica", "Casco básico", "Extintor de CO₂"],
+        correct: 0,
+        explanation: "La cuerda dinámica es esencial para rescates en altura por su elasticidad."
       }
-    }, 1000);
-  }
+    ];
 
-  function showQuestion() {
-    const qObj = currentQuestions[currentQuestionIndex];
-    const container = document.getElementById('questionsContainer');
-    container.innerHTML = '';
+    const preguntasCadiz = [
+      {
+        q: "¿Qué agente se usa para fuegos tipo B?",
+        options: ["CO₂", "Agua", "Espuma", "Polvo seco"],
+        correct: 2,
+        explanation: "La espuma es el agente más efectivo para fuegos tipo B que involucran líquidos inflamables."
+      },
+      {
+        q: "¿Cuál es la función del equipo autoescala?",
+        options: ["Extinción de incendios", "Rescate en altura", "Ventilación de humos", "Primeros auxilios"],
+        correct: 1,
+        explanation: "El equipo autoescala se utiliza para rescates en altura y acceso a lugares elevados."
+      }
+    ];
 
-    let optionsHTML = '';
-    for(let i=0; i < qObj.options.length; i++) {
-      optionsHTML += `
-        <label class="option-label" id="option-label-${i}">
-          <input type="radio" name="answer" value="${i}" onchange="selectAnswer(${i})" />
-          ${qObj.options[i]}
-        </label>`;
+    let currentTestType = null;
+    let currentQuestions = [];
+    let currentMode = 'exam';
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timeLeft = 0;
+    let timerInterval;
+
+    function selectTest(testType) {
+      currentTestType = testType;
+      document.body.style.backgroundColor = testType === 'madrid' ? '#003366' : '#FFDD00';
+      document.getElementById('afterTestSelect').style.display = 'block';
     }
 
-    container.innerHTML = `<div class="question-box"><h3>${currentQuestionIndex+1}. ${qObj.q}</h3>${optionsHTML}</div>`;
-    document.getElementById('explanation').innerHTML = '';
-  }
+    function startTest() {
+      const numQ = parseInt(document.getElementById('numQuestions').value);
+      if (isNaN(numQ) || numQ < 1 || numQ > 5000) {
+        alert('Introduce un número válido entre 1 y 5000.');
+        return;
+      }
 
-  function selectAnswer(selectedIndex) {
-    const qObj = currentQuestions[currentQuestionIndex];
-    const labels = document.querySelectorAll('.option-label');
-    
-    // Modo examen: solo avanzamos sin mostrar nada
-    if(currentMode === 'exam') {
-      if(selectedIndex === qObj.correct) score++;
-      nextQuestion();
+      currentMode = document.querySelector('input[name="mode"]:checked').value;
+      const allQuestions = currentTestType === 'madrid' ? preguntasMadrid : preguntasCadiz;
+      currentQuestions = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0, numQ);
+
+      currentQuestionIndex = 0;
+      score = 0;
+      timeLeft = numQ * 30;
+
+      document.getElementById('menu').style.display = 'none';
+      document.getElementById('testSection').style.display = 'block';
+      document.getElementById('testTitle').textContent = `Test ${currentTestType === 'madrid' ? 'Madrid' : 'Cádiz'} - Pregunta 1 de ${numQ}`;
+
+      startTimer();
+      showQuestion();
     }
-    else if(currentMode === 'review') {
-      // Modo repaso: marcamos colores y mostramos explicación
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = String(timeLeft % 60).padStart(2, '0');
+        document.getElementById('timer').textContent = `Tiempo restante: ${minutes}:${seconds}`;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          submitTest();
+        }
+      }, 1000);
+    }
+
+    function showQuestion() {
+      const container = document.getElementById('questionsContainer');
+      const qObj = currentQuestions[currentQuestionIndex];
+      let optionsHTML = '';
+
+      qObj.options.forEach((opt, i) => {
+        optionsHTML += `
+          <label class="option-label" onclick="selectAnswer(${i})">
+            <input type="radio" name="answer" value="${i}" hidden />
+            ${opt}
+          </label>`;
+      });
+
+      container.innerHTML = `<div class="question-box"><h3>${currentQuestionIndex + 1}. ${qObj.q}</h3>${optionsHTML}</div>`;
+      document.getElementById('explanation').innerHTML = '';
+    }
+
+    function selectAnswer(selectedIndex) {
+      const qObj = currentQuestions[currentQuestionIndex];
+      const labels = document.querySelectorAll('.option-label');
+
       labels.forEach((label, idx) => {
         label.classList.remove('correct', 'incorrect');
-        if(idx === qObj.correct) label.classList.add('correct');
-        if(idx === selectedIndex && selectedIndex !== qObj.correct) label.classList.add('incorrect');
       });
-      if(selectedIndex === qObj.correct) score++;
 
-      document.getElementById('explanation').textContent = qObj.explanation;
+      if (currentMode === 'exam') {
+        if (selectedIndex === qObj.correct) score++;
+        nextQuestion();
+      } else if (currentMode === 'review') {
+        if (selectedIndex === qObj.correct) {
+          score++;
+          labels[selectedIndex].classList.add('correct');
+        } else {
+          labels[selectedIndex].classList.add('incorrect');
+          labels[qObj.correct].classList.add('correct');
+        }
 
-      // Deshabilitar inputs para que no cambien
-      const inputs = document.querySelectorAll('input[name="answer"]');
-      inputs.forEach(i => i.disabled = true);
+        document.getElementById('explanation').textContent = qObj.explanation;
 
-      // Pasar a la siguiente pregunta tras 2 segundos
-      setTimeout(nextQuestion, 2000);
+        setTimeout(nextQuestion, 2000);
+      }
     }
-  }
 
-  function nextQuestion() {
-    currentQuestionIndex++;
-    if(currentQuestionIndex >= currentQuestions.length) {
-      submitTest();
-      return;
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex >= currentQuestions.length) {
+        submitTest();
+        return;
+      }
+      document.getElementById('testTitle').textContent = `Test ${currentTestType === 'madrid' ? 'Madrid' : 'Cádiz'} - Pregunta ${currentQuestionIndex + 1} de ${currentQuestions.length}`;
+      showQuestion();
     }
-    document.getElementById('testTitle').textContent = `Test ${currentTestType === 'madrid' ? 'Madrid' : 'Cádiz'} - Pregunta ${currentQuestionIndex+1} de ${currentQuestions.length}`;
-    showQuestion();
-  }
 
-  function submitTest() {
-    clearInterval(timerInterval);
-    document.getElementById('questionsContainer').innerHTML = '';
-    document.getElementById('explanation').innerHTML = '';
-    document.getElementById('timer').textContent = '';
-    document.getElementById('testTitle').textContent = 'Resultado final';
+    function submitTest() {
+      clearInterval(timerInterval);
+      document.getElementById('questionsContainer').innerHTML = '';
+      document.getElementById('explanation').innerHTML = '';
+      document.getElementById('timer').textContent = '';
+      document.getElementById('testTitle').textContent = 'Resultado final';
 
-    const total = currentQuestions.length;
-    const percent = Math.round((score / total) * 100);
+      const total = currentQuestions.length;
+      const percent = Math.round((score / total) * 100);
+      const resultDiv = document.getElementById('result');
+      resultDiv.textContent = `Has acertado ${score} de ${total} preguntas (${percent}%).`;
+      resultDiv.style.color = percent >= 80 ? '#00ff99' : percent >= 50 ? '#ffcc00' : '#ff5555';
+      resultDiv.style.display = 'block';
 
-    let color = '#ff5555';
-    if (percent >= 80) color = '#00ff99';
-    else if (percent >= 50) color = '#ffcc00';
-
-    const resultDiv = document.getElementById('result');
-    resultDiv.style.color = color;
-    resultDiv.style.display = 'block';
-    resultDiv.textContent = `Has acertado ${score} de ${total} preguntas (${percent}%).`;
-
-    // Mostrar botón reiniciar
-    document.querySelector('button[onclick="location.reload()"]').style.display = 'block';
-
-  }
-</script>
-
+      document.getElementById('restartBtn').style.display = 'block';
+    }
+  </script>
 </body>
 </html> 
