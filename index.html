@@ -2,6 +2,18 @@ GENERAL CRAVCHENKO
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- Manifest para instalar la app -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#e60000">
+
+<!-- Registro del Service Worker -->
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('✅ Service Worker registrado'))
+      .catch(error => console.error('❌ Error al registrar SW:', error));
+  }
+</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ChenkoTests: Oposiciones Bombero</title>
