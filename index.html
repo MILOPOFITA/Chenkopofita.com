@@ -4,16 +4,12 @@ GENERAL CRAVCHENKO
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Chenko Tests Avanzado</title>
+<title>Chenko Tests Avanzado - Registro y Login</title>
 <style>
-  /* Fuentes y Reset */
   @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
   body {
     margin: 0; font-family: 'Roboto', sans-serif;
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background:
       radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1), transparent 40%),
       radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1), transparent 40%),
@@ -21,51 +17,41 @@ GENERAL CRAVCHENKO
     background-repeat: no-repeat;
     background-size: 400px 400px;
     color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
   }
-
-  /* CONTENEDORES PRINCIPALES */
-  #requestAccess {
-    background: rgba(0,0,0,0.65);
-    padding: 3rem 2rem;
+  #container {
+    background: rgba(0,0,0,0.7);
+    padding: 2rem 3rem;
     border-radius: 20px;
-    box-shadow: 0 0 30px rgba(255,255,255,0.15);
     max-width: 420px;
     width: 100%;
-    text-align: center;
+    box-sizing: border-box;
   }
-
-  #requestAccess h1 {
-    font-size: 3rem;
+  h1 {
     color: #FFDD00;
     text-shadow: 1px 1px 5px #000;
+    text-align: center;
     margin-bottom: 1rem;
   }
-
-  #requestAccess p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-  }
-
-  #requestAccess form {
+  form {
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 1rem;
   }
-
-  #requestAccess input[type=email],
-  #requestAccess input[type=text],
-  #requestAccess input[type=password] {
+  input[type=email], input[type=text], input[type=password] {
     padding: 1rem;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     border-radius: 12px;
     border: none;
     outline: none;
     width: 100%;
   }
-
-  #requestAccess button[type=submit] {
+  button {
     padding: 1.2rem;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     border-radius: 14px;
     border: none;
     background-color: #FFDD00;
@@ -74,33 +60,14 @@ GENERAL CRAVCHENKO
     font-weight: bold;
     transition: background-color 0.3s ease;
   }
-  #requestAccess button[type=submit]:hover {
+  button:hover {
     background-color: #e6c900;
   }
-
-  #requestAccess small {
-    font-size: 0.9rem;
-    opacity: 0.7;
-    margin-top: 0.5rem;
+  #message {
+    margin-top: 1rem;
+    font-size: 1rem;
+    text-align: center;
   }
-
-  #requestAccess .btn-access {
-    margin-top: 2rem;
-    background-color: white;
-    color: black;
-    font-weight: 700;
-    border-radius: 14px;
-    padding: 1rem 2rem;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-    transition: background-color 0.3s ease;
-  }
-  #requestAccess .btn-access:hover {
-    background-color: #ddd;
-  }
-
-  /* OCULTAR APP INICIALMENTE */
   #app {
     display: none;
     max-width: 900px;
@@ -111,8 +78,8 @@ GENERAL CRAVCHENKO
     align-items: center;
     color: white;
   }
-
-  /* MENÚ */
+  /* Resto estilos app iguales que antes (copiar tu CSS para tests y menús) */
+  /* CONTENEDORES PRINCIPALES */
   #menu {
     display: flex;
     flex-direction: column;
@@ -255,31 +222,42 @@ GENERAL CRAVCHENKO
   button.button:hover {
     transform: scale(1.05);
   }
-
 </style>
 </head>
 <body>
 
-<!-- PANTALLA DE SOLICITUD DE ACCESO -->
-<div id="requestAccess">
-  <h1>Solicitud de acceso</h1>
-  <p>Para acceder a los tests, rellena el formulario con tus datos.<br> Recibiré tu solicitud en mi correo y te enviaré acceso si lo apruebo.</p>
+<div id="container">
 
-  <form action="https://formspree.io/f/tu_id_formspree" method="POST" autocomplete="off">
-    <input type="email" name="email" placeholder="Correo electrónico" required />
-    <input type="text" name="username" placeholder="Nombre de usuario" required />
-    <input type="password" name="password" placeholder="Contraseña" required />
-    <button type="submit">Enviar solicitud</button>
-  </form>
+  <!-- Registro -->
+  <div id="registerDiv">
+    <h1>Registro</h1>
+    <p>Para acceder a los tests, rellena el formulario para solicitar acceso.<br> Recibiré tu solicitud por correo y, si te apruebo, podrás iniciar sesión.</p>
+    <form id="registerForm" action="https://formspree.io/f/tu_id_formspree" method="POST" autocomplete="off">
+      <input type="email" name="email" placeholder="Correo electrónico" required />
+      <input type="text" name="username" placeholder="Nombre de usuario" required />
+      <input type="password" name="password" placeholder="Contraseña" required />
+      <button type="submit">Enviar solicitud</button>
+    </form>
+    <div id="registerMessage" style="color:#FFDD00; margin-top:0.8rem; text-align:center;"></div>
+    <p style="margin-top:1rem; text-align:center;">¿Ya tienes cuenta? <a href="#" id="toLoginLink" style="color:#FFDD00; cursor:pointer;">Inicia sesión aquí</a></p>
+  </div>
 
-  <small>No compartas tu contraseña con nadie. Solo la usarás para acceso si te autorizo.</small>
+  <!-- Login -->
+  <div id="loginDiv" style="display:none;">
+    <h1>Iniciar sesión</h1>
+    <form id="loginForm" autocomplete="off">
+      <input type="email" id="loginEmail" placeholder="Correo electrónico" required />
+      <input type="password" id="loginPassword" placeholder="Contraseña" required />
+      <button type="submit">Entrar</button>
+    </form>
+    <div id="loginMessage" style="color:#FFDD00; margin-top:0.8rem; text-align:center;"></div>
+    <p style="margin-top:1rem; text-align:center;">¿No tienes cuenta? <a href="#" id="toRegisterLink" style="color:#FFDD00; cursor:pointer;">Regístrate aquí</a></p>
+  </div>
 
-  <button class="btn-access" onclick="grantAccess()">Ya tengo acceso</button>
 </div>
 
 <!-- CONTENIDO PRINCIPAL DE LA WEB -->
-<div id="app">
-
+<div id="app" style="display:flex; flex-direction:column; align-items:center;">
   <div id="menu">
     <h1>ChenkoTests: Oposiciones Bombero</h1>
     <p>Selecciona el tipo de test:</p>
@@ -302,15 +280,117 @@ GENERAL CRAVCHENKO
     <div class="timer" id="timer"></div>
     <div id="questionsContainer"></div>
     <div id="explanation"></div>
-    <button id="btnFinish" class="button" onclick="submitTest()">Finalizar test</button>
+    <button class="button" id="btnFinish" onclick="submitTest()">Finalizar test</button>
     <div id="result" style="display:none;"></div>
-    <button id="btnRestart" class="button" onclick="location.reload()" style="display:none;">Reiniciar</button>
+    <button class="button" id="btnRestart" onclick="location.reload()" style="display:none;">Reiniciar</button>
   </div>
-
 </div>
 
 <script>
-  // Preguntas ejemplo (tú añadirás las tuyas o extraerás de PDFs)
+  // Cambiar vistas entre registro y login
+  document.getElementById('toLoginLink').addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('registerDiv').style.display = 'none';
+    document.getElementById('loginDiv').style.display = 'block';
+    clearMessages();
+  });
+  document.getElementById('toRegisterLink').addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('loginDiv').style.display = 'none';
+    document.getElementById('registerDiv').style.display = 'block';
+    clearMessages();
+  });
+  function clearMessages(){
+    document.getElementById('registerMessage').textContent = '';
+    document.getElementById('loginMessage').textContent = '';
+  }
+
+  // Registro - solo envía el formulario a Formspree
+  const registerForm = document.getElementById('registerForm');
+  registerForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const formData = new FormData(registerForm);
+    fetch(registerForm.action, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    }).then(response => {
+      if (response.ok) {
+        document.getElementById('registerMessage').textContent = 'Solicitud enviada. Te avisaré por email si apruebo tu acceso.';
+        registerForm.reset();
+      } else {
+        document.getElementById('registerMessage').textContent = 'Error al enviar la solicitud. Intenta más tarde.';
+      }
+    }).catch(() => {
+      document.getElementById('registerMessage').textContent = 'Error al enviar la solicitud. Intenta más tarde.';
+    });
+  });
+
+  // Aquí definimos tu usuario admin fijo que SIEMPRE puede entrar
+  const adminUser = {
+    email: 'tu-email@dominio.com', // <-- pon aquí tu correo
+    password: 'tuPassword123'       // <-- pon aquí tu contraseña
+  };
+
+  // Simulamos usuarios aprobados guardados en localStorage (excepto adminUser)
+  if(!localStorage.getItem('approvedUsers')) {
+    const approvedUsers = [
+      // No incluyas adminUser aquí, porque siempre entra sin depender del storage
+      { email: 'usuario1@example.com', password: '1234' },
+      { email: 'usuario2@example.com', password: 'abcd' }
+    ];
+    localStorage.setItem('approvedUsers', JSON.stringify(approvedUsers));
+  }
+
+  // Login
+  const loginForm = document.getElementById('loginForm');
+  loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+
+    const approvedUsers = JSON.parse(localStorage.getItem('approvedUsers')) || [];
+
+    // Comprobar si es admin (tu)
+    if(email === adminUser.email && password === adminUser.password){
+      localStorage.setItem('loggedInUser', email);
+      clearMessages();
+      showApp();
+      return;
+    }
+
+    // Comprobar si está en usuarios aprobados
+    const userFound = approvedUsers.find(u => u.email === email && u.password === password);
+
+    if(userFound){
+      localStorage.setItem('loggedInUser', email);
+      clearMessages();
+      showApp();
+    } else {
+      document.getElementById('loginMessage').textContent = 'Email o contraseña incorrectos.';
+    }
+  });
+
+  // Mostrar contenido principal si está logueado
+  function showApp(){
+    document.getElementById('container').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    // Cambiar fondo al entrar
+    document.body.style.background =
+      'radial-gradient(circle at 20% 30%, #003366cc, transparent 40%), radial-gradient(circle at 80% 80%, #0055cccc, transparent 40%), linear-gradient(135deg, #003366, #004080)';
+  }
+
+  // Al cargar página, verificar sesión
+  window.onload = () => {
+    const logged = localStorage.getItem('loggedInUser');
+    if(logged === adminUser.email || 
+       (JSON.parse(localStorage.getItem('approvedUsers')) || []).some(u => u.email === logged)){
+      showApp();
+    }
+  };
+
+  // Resto de código original para tests...
+
   const preguntasMadrid = [
     {
       q: "¿Cuál es el color de la manguera tipo 1?",
@@ -362,151 +442,134 @@ GENERAL CRAVCHENKO
   let timeLeft = 0;
   let timerInterval;
 
-  // Función para mostrar formulario o contenido
-  function grantAccess() {
-    document.getElementById('requestAccess').style.display = 'none';
-    document.getElementById('app').style.display = 'flex';
-    // Fondo azul neutro para test
-    document.body.style.background =
-      'radial-gradient(circle at 20% 30%, #003366cc, transparent 40%), radial-gradient(circle at 80% 80%, #0055cccc, transparent 40%), linear-gradient(135deg, #003366, #004080)';
-  }
-
-  // Selección tipo test
   function selectTest(testType) {
     currentTestType = testType;
     document.getElementById('afterTestSelect').style.display = 'flex';
   }
 
-  // Inicio del test
   function startTest() {
     const numQ = parseInt(document.getElementById('numQuestions').value);
     if (isNaN(numQ) || numQ < 1 || numQ > 5000) {
       alert('Introduce un número válido de preguntas entre 1 y 5000.');
       return;
     }
-
     const modeRadio = document.querySelector('input[name="mode"]:checked');
     currentMode = modeRadio ? modeRadio.value : 'exam';
-
     const allQuestions = currentTestType === 'madrid' ? preguntasMadrid : preguntasCadiz;
-
-    // Ajustamos la cantidad a la disponible
-    const maxAvailable = allQuestions.length;
-    currentQuestions = allQuestions.slice(0, Math.min(numQ, maxAvailable));
-
+    // Repetir preguntas si no hay suficientes
+    currentQuestions = [];
+    for(let i=0; i < numQ; i++){
+      currentQuestions.push(allQuestions[i % allQuestions.length]);
+    }
     currentQuestionIndex = 0;
     score = 0;
-    timeLeft = currentQuestions.length * 30;
 
     document.getElementById('menu').style.display = 'none';
     document.getElementById('testSection').style.display = 'block';
-    document.getElementById('result').style.display = 'none';
-    document.getElementById('explanation').innerHTML = '';
-
-    document.getElementById('btnFinish').style.display = 'block';
-    document.getElementById('btnRestart').style.display = 'none';
-
-    document.getElementById('testTitle').textContent = `Test ${currentTestType === 'madrid' ? 'Madrid' : 'Cádiz'} - Pregunta 1 de ${currentQuestions.length}`;
-
-    startTimer();
     showQuestion();
+    startTimer(numQ * 30); // 30 seg por pregunta
   }
 
-  // Temporizador
-  function startTimer() {
+  function showQuestion() {
+    const qObj = currentQuestions[currentQuestionIndex];
+    document.getElementById('testTitle').textContent = `Pregunta ${currentQuestionIndex + 1} de ${currentQuestions.length}`;
+    const questionsContainer = document.getElementById('questionsContainer');
+    questionsContainer.innerHTML = '';
+
+    const questionBox = document.createElement('div');
+    questionBox.className = 'question-box';
+
+    const questionTitle = document.createElement('h3');
+    questionTitle.textContent = qObj.q;
+    questionBox.appendChild(questionTitle);
+
+    qObj.options.forEach((opt, i) => {
+      const label = document.createElement('label');
+      label.className = 'option-label';
+
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = 'option';
+      radio.value = i;
+
+      label.appendChild(radio);
+      label.appendChild(document.createTextNode(opt));
+      questionBox.appendChild(label);
+    });
+
+    questionsContainer.appendChild(questionBox);
+
+    document.getElementById('explanation').textContent = '';
+    document.getElementById('btnFinish').style.display = 'inline-block';
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('btnRestart').style.display = 'none';
+  }
+
+  function submitTest() {
+    // Verificar respuesta seleccionada
+    const selected = document.querySelector('input[name="option"]:checked');
+    if (!selected) {
+      alert('Selecciona una opción antes de continuar.');
+      return;
+    }
+    const answer = parseInt(selected.value);
+    const currentQ = currentQuestions[currentQuestionIndex];
+
+    if(answer === currentQ.correct){
+      score++;
+    }
+
+    // Mostrar explicación si modo repaso
+    if(currentMode === 'review'){
+      const optionsLabels = document.querySelectorAll('.option-label');
+      optionsLabels.forEach((label, i) => {
+        label.classList.remove('correct', 'incorrect');
+        if(i === currentQ.correct) label.classList.add('correct');
+        if(i === answer && answer !== currentQ.correct) label.classList.add('incorrect');
+      });
+      document.getElementById('explanation').textContent = currentQ.explanation;
+    }
+
+    currentQuestionIndex++;
+    if(currentQuestionIndex < currentQuestions.length){
+      showQuestion();
+    } else {
+      endTest();
+    }
+  }
+
+  function endTest(){
     clearInterval(timerInterval);
+    document.getElementById('questionsContainer').innerHTML = '';
+    document.getElementById('testTitle').textContent = 'Test finalizado';
+    document.getElementById('timer').textContent = '';
+    document.getElementById('explanation').textContent = '';
+    document.getElementById('btnFinish').style.display = 'none';
+    document.getElementById('result').style.display = 'block';
+    document.getElementById('btnRestart').style.display = 'inline-block';
+    document.getElementById('result').textContent = `Has acertado ${score} de ${currentQuestions.length} preguntas.`;
+  }
+
+  function startTimer(seconds) {
+    timeLeft = seconds;
+    updateTimer();
     timerInterval = setInterval(() => {
       timeLeft--;
-      const minutes = Math.floor(timeLeft / 60);
-      const seconds = timeLeft % 60;
-      document.getElementById('timer').textContent = `Tiempo restante: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-      if (timeLeft <= 0) {
+      if(timeLeft <= 0){
         clearInterval(timerInterval);
-        submitTest();
+        alert('Se ha acabado el tiempo.');
+        endTest();
       }
+      updateTimer();
     }, 1000);
   }
 
-  // Mostrar pregunta actual
-  function showQuestion() {
-    const qObj = currentQuestions[currentQuestionIndex];
-    const container = document.getElementById('questionsContainer');
-    container.innerHTML = '';
-
-    let optionsHTML = '';
-    for(let i=0; i < qObj.options.length; i++) {
-      optionsHTML += `
-        <label class="option-label" id="option-label-${i}">
-          <input type="radio" name="answer" value="${i}" onchange="selectAnswer(${i})" />
-          ${qObj.options[i]}
-        </label>`;
-    }
-
-    container.innerHTML = `<div class="question-box"><h3>${currentQuestionIndex+1}. ${qObj.q}</h3>${optionsHTML}</div>`;
-    document.getElementById('explanation').innerHTML = '';
+  function updateTimer(){
+    const min = Math.floor(timeLeft / 60);
+    const sec = timeLeft % 60;
+    document.getElementById('timer').textContent = `Tiempo restante: ${min}:${sec.toString().padStart(2,'0')}`;
   }
 
-  // Responder pregunta
-  function selectAnswer(selectedIndex) {
-    const qObj = currentQuestions[currentQuestionIndex];
-    const labels = document.querySelectorAll('.option-label');
-
-    if(currentMode === 'exam') {
-      if(selectedIndex === qObj.correct) score++;
-      nextQuestion();
-    }
-    else if(currentMode === 'review') {
-      labels.forEach((label, idx) => {
-        label.classList.remove('correct', 'incorrect');
-        if(idx === qObj.correct) label.classList.add('correct');
-        if(idx === selectedIndex && selectedIndex !== qObj.correct) label.classList.add('incorrect');
-      });
-      if(selectedIndex === qObj.correct) score++;
-
-      document.getElementById('explanation').textContent = qObj.explanation;
-
-      // Deshabilitar inputs para evitar cambios
-      const inputs = document.querySelectorAll('input[name="answer"]');
-      inputs.forEach(i => i.disabled = true);
-
-      setTimeout(nextQuestion, 2000);
-    }
-  }
-
-  // Avanzar pregunta o finalizar test
-  function nextQuestion() {
-    currentQuestionIndex++;
-    if(currentQuestionIndex >= currentQuestions.length) {
-      submitTest();
-      return;
-    }
-    document.getElementById('testTitle').textContent = `Test ${currentTestType === 'madrid' ? 'Madrid' : 'Cádiz'} - Pregunta ${currentQuestionIndex + 1} de ${currentQuestions.length}`;
-    showQuestion();
-  }
-
-  // Finalizar test y mostrar resultado
-  function submitTest() {
-    clearInterval(timerInterval);
-    document.getElementById('questionsContainer').innerHTML = '';
-    document.getElementById('explanation').innerHTML = '';
-    document.getElementById('timer').textContent = '';
-
-    const resultDiv = document.getElementById('result');
-    const percentage = Math.round((score / currentQuestions.length) * 100);
-    let color = 'white';
-
-    if (percentage >= 90) color = '#4CAF50'; // verde
-    else if (percentage >= 70) color = '#FFC107'; // amarillo
-    else color = '#F44336'; // rojo
-
-    resultDiv.style.display = 'block';
-    resultDiv.style.color = color;
-    resultDiv.textContent = `Has acertado ${score} de ${currentQuestions.length} preguntas (${percentage}%).`;
-
-    // Ocultar botón finalizar y mostrar reiniciar
-    document.getElementById('btnFinish').style.display = 'none';
-    document.getElementById('btnRestart').style.display = 'block';
-  }
 </script>
 
 </body>
