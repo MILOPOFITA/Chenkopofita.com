@@ -13,10 +13,10 @@ GENERAL CRAVCHENKO
       --color-cadiz: #FFDD00;
       --radius: 12px;
       --shadow: 0 4px 12px rgba(0,0,0,0.2);
-      --bg-light: #f0f0f0;
-      --text-light: #222;
       --bg-dark: #1e1e1e;
       --text-dark: #eee;
+      --bg-light: #f0f0f0;
+      --text-light: #222;
     }
     * {
       box-sizing: border-box;
@@ -175,7 +175,7 @@ GENERAL CRAVCHENKO
     <div id="afterTestSelect" style="display:none;">
       <div class="form-group">
         <label for="numQuestions">¿Cuántas preguntas quieres responder? (1 - 5000)</label><br/>
-        <input type="number" id="numQuestions" value="20" min="1" max="5000" />
+        <input type="number" id="numQuestions" value="10" min="1" max="5000" />
       </div>
       <div class="form-group">
         <label><input type="radio" name="mode" value="exam" checked> Modo Examen</label>
@@ -191,10 +191,50 @@ GENERAL CRAVCHENKO
     <div id="explanation"></div>
     <button class="button-main" onclick="submitTest()">Finalizar Test</button>
     <div id="result" style="display:none;"></div>
-    <button class="button-main" onclick="restartTest()" style="display:none;" id="restartBtn">Reiniciar</button>
+    <button class="button-main" onclick="location.reload()" style="display:none;" id="restartBtn">Reiniciar</button>
   </section>
 
   <script>
+    // Preguntas de ejemplo (simulan JSON externo)
+    const preguntasMadrid = [
+      {
+        q: "¿Cuál es el color de la manguera tipo 1?",
+        options: ["Rojo", "Negro", "Azul"],
+        correct: 1,
+        explanation: "La manguera tipo 1 se identifica con el color negro para distinguirla en el equipo."
+      },
+      {
+        q: "¿Qué equipo se usa para rescates en altura?",
+        options: ["Cuerda dinámica", "Casco básico", "Extintor de CO₂"],
+        correct: 0,
+        explanation: "La cuerda dinámica es esencial para rescates en altura por su elasticidad."
+      }
+    ];
+
+    const preguntasCadiz = [
+      {
+        q: "¿Qué agente se usa para fuegos tipo B?",
+        options: ["CO₂", "Agua", "Espuma", "Polvo seco"],
+        correct: 2,
+        explanation: "La espuma es el agente más efectivo para fuegos tipo B que involucran líquidos inflamables."
+      },
+      {
+        q: "¿Cuál es la función del equipo autoescala?",
+        options: ["Extinción de incendios", "Rescate en altura", "Ventilación de humos", "Primeros auxilios"],
+        correct: 1,
+        explanation: "El equipo autoescala se utiliza para rescates en altura y acceso a lugares elevados."
+      }
+    ];
+
+    let currentTestType = null;
+    let currentQuestions = [];
+    let currentMode = 'exam';
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timeLeft = 0;
+    let timerInterval;
+
+    // Manejo del tema claro/oscuro
     const toggleThemeBtn = document.getElementById("toggleThemeBtn");
     let currentTheme = "dark";
     toggleThemeBtn.addEventListener("click", () => {
@@ -211,37 +251,21 @@ GENERAL CRAVCHENKO
       }
     });
 
-    let currentTestType = null;
-    let currentQuestions = [];
-    let currentMode = 'exam';
-    let currentQuestionIndex = 0;
-    let score = 0;
-    let timeLeft = 0;
-    let timerInterval;
-
-    async function selectTest(testType) {
+    function selectTest(testType) {
       currentTestType = testType;
       document.body.style.backgroundColor = testType === 'madrid' ? '#003366' : '#FFDD00';
       document.getElementById('afterTestSelect').style.display = 'block';
     }
 
-    async function startTest() {
+    function startTest() {
       const numQ = parseInt(document.getElementById('numQuestions').value);
       if (isNaN(numQ) || numQ < 1 || numQ > 5000) {
         alert('Introduce un número válido entre 1 y 5000.');
         return;
       }
       currentMode = document.querySelector('input[name="mode"]:checked').value;
-      try {
-        const response = await fetch(`${currentTestType}.json`);
-        if (!response.ok) throw new Error("Error al cargar las preguntas.");
-        const data = await response.json();
-        currentQuestions = [...data].sort(() => 0.5 - Math.random()).slice(0, numQ);
-      } catch (err) {
-        alert("No se pudieron cargar las preguntas. Inténtalo más tarde.");
-        console.error(err);
-        return;
-      }
+      const allQuestions = currentTestType === 'madrid' ? preguntasMadrid : preguntasCadiz;
+      currentQuestions = [...allQuestions].sort(() => 0.5 - Math.random()).slice(0, numQ);
       currentQuestionIndex = 0;
       score = 0;
       timeLeft = numQ * 30;
@@ -284,9 +308,8 @@ GENERAL CRAVCHENKO
     function selectAnswer(selectedIndex) {
       const qObj = currentQuestions[currentQuestionIndex];
       const labels = document.querySelectorAll('.option-label');
-      labels.forEach((label, idx) => {
-        label.classList.remove('correct', 'incorrect');
-      });
+      labels.forEach((label, idx) => label.classList.remove('correct', 'incorrect'));
+
       if (currentMode === 'exam') {
         if (selectedIndex === qObj.correct) score++;
         nextQuestion();
@@ -326,15 +349,6 @@ GENERAL CRAVCHENKO
       resultDiv.style.color = percent >= 80 ? '#00ff99' : percent >= 50 ? '#ffcc00' : '#ff5555';
       resultDiv.style.display = 'block';
       document.getElementById('restartBtn').style.display = 'block';
-    }
-
-    function restartTest() {
-      document.getElementById('menu').style.display = 'block';
-      document.getElementById('testSection').style.display = 'none';
-      document.getElementById('result').style.display = 'none';
-      document.getElementById('restartBtn').style.display = 'none';
-      document.getElementById('afterTestSelect').style.display = 'none';
-      document.body.style.backgroundColor = 'var(--color-primary)';
     }
   </script>
 </body>
