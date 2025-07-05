@@ -6,20 +6,129 @@ GENERAL CRAVCHENKO
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Chenko Tests Avanzado</title>
 <style>
+  /* Fuentes y Reset */
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
   body {
     margin: 0; font-family: 'Roboto', sans-serif;
-    background: linear-gradient(135deg, #8B0000, #2F0000);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:
+      radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1), transparent 40%),
+      radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1), transparent 40%),
+      linear-gradient(135deg, #8B0000, #2F0000);
+    background-repeat: no-repeat;
+    background-size: 400px 400px;
     color: white;
-    display: flex; flex-direction: column; align-items: center;
-    min-height: 100vh; padding: 2rem;
-    transition: background 0.5s ease;
-    background-image:
-      radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03), transparent 25%),
-      radial-gradient(circle at 80% 60%, rgba(255,255,255,0.03), transparent 25%);
-    background-repeat: repeat;
-    background-size: 200px 200px;
   }
-  h1, h2, h3 { text-align: center; }
+
+  /* CONTENEDORES PRINCIPALES */
+  #requestAccess {
+    background: rgba(0,0,0,0.65);
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(255,255,255,0.15);
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+  }
+
+  #requestAccess h1 {
+    font-size: 3rem;
+    color: #FFDD00;
+    text-shadow: 1px 1px 5px #000;
+    margin-bottom: 1rem;
+  }
+
+  #requestAccess p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  #requestAccess form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  #requestAccess input[type=email],
+  #requestAccess input[type=text],
+  #requestAccess input[type=password] {
+    padding: 1rem;
+    font-size: 1.2rem;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    width: 100%;
+  }
+
+  #requestAccess button[type=submit] {
+    padding: 1.2rem;
+    font-size: 1.3rem;
+    border-radius: 14px;
+    border: none;
+    background-color: #FFDD00;
+    color: black;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  #requestAccess button[type=submit]:hover {
+    background-color: #e6c900;
+  }
+
+  #requestAccess small {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-top: 0.5rem;
+  }
+
+  #requestAccess .btn-access {
+    margin-top: 2rem;
+    background-color: white;
+    color: black;
+    font-weight: 700;
+    border-radius: 14px;
+    padding: 1rem 2rem;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+  }
+  #requestAccess .btn-access:hover {
+    background-color: #ddd;
+  }
+
+  /* OCULTAR APP INICIALMENTE */
+  #app {
+    display: none;
+    max-width: 900px;
+    width: 100%;
+    padding: 1rem 2rem;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+  }
+
+  /* MENÚ */
+  #menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #menu h1 {
+    margin-bottom: 0.3rem;
+    font-weight: 700;
+    font-size: 2.8rem;
+  }
+  #menu p {
+    margin-top: 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+
   .test-choice-btn {
     font-size: 1.4rem;
     font-weight: bold;
@@ -29,40 +138,88 @@ GENERAL CRAVCHENKO
     cursor: pointer;
     border: none;
     color: black;
-    width: 250px;
+    width: 260px;
     transition: transform 0.2s ease;
   }
   .btn-madrid { background-color: #003366; }
   .btn-cadiz { background-color: #FFDD00; }
   .test-choice-btn:hover { transform: scale(1.05); }
-  #menu { display: flex; flex-direction: column; align-items: center; }
-  #modeSelection {
-    margin: 1rem 0;
+
+  #afterTestSelect {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #afterTestSelect p {
     font-size: 1.1rem;
+    margin: 0.5rem 0;
   }
+
   input[type=number] {
-    width: 100px; padding: 0.5rem; border-radius: 8px; font-size: 1.1rem;
+    width: 110px;
+    padding: 0.6rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
     margin-bottom: 1rem;
+    border: none;
+    outline: none;
   }
-  #testSection { max-width: 800px; width: 100%; margin-top: 1rem; }
+
+  #modeSelection label {
+    margin: 0 1rem;
+    font-weight: 600;
+  }
+
+  /* TEST SECTION */
+  #testSection {
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 800px;
+  }
+  #testTitle {
+    font-size: 1.8rem;
+    margin-bottom: 0.6rem;
+  }
+  .timer {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: white;
+    text-align: center;
+  }
   .question-box {
-    background-color: white; color: black;
-    padding: 1rem; border-radius: 10px; margin-bottom: 1rem;
+    background-color: white;
+    color: black;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  .question-box h3 {
+    margin-top: 0;
   }
   .option-label {
     display: block;
-    padding: 0.5rem;
+    padding: 0.6rem 1rem;
     margin: 0.4rem 0;
     border-radius: 8px;
     cursor: pointer;
     border: 1px solid #ccc;
     user-select: none;
+    font-size: 1.1rem;
   }
-  .option-label:hover { background: #eee; }
-  .correct { background-color: #b6f2b6 !important; border-color: #0a0; }
-  .incorrect { background-color: #f2b6b6 !important; border-color: #a00; }
-  .timer {
-    font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem; color: white;
+  .option-label:hover {
+    background: #eee;
+  }
+  .correct {
+    background-color: #b6f2b6 !important;
+    border-color: #0a0 !important;
+  }
+  .incorrect {
+    background-color: #f2b6b6 !important;
+    border-color: #a00 !important;
   }
   #explanation {
     background: #f9f9f9;
@@ -71,62 +228,57 @@ GENERAL CRAVCHENKO
     border-radius: 10px;
     margin-top: 1rem;
     font-style: italic;
+    min-height: 60px;
   }
+
   #result {
-    font-size: 1.3rem;
-    margin-top: 1rem;
+    font-size: 1.4rem;
+    margin-top: 1.5rem;
     color: white;
-    font-weight: bold;
+    font-weight: 700;
+    text-align: center;
   }
+
   button.button {
     background-color: #fff;
     color: #000;
     border: none;
     padding: 1rem 2rem;
-    margin: 1rem auto;
-    font-size: 1.2rem;
+    margin: 2rem auto;
+    font-size: 1.3rem;
     cursor: pointer;
     border-radius: 12px;
     display: block;
     max-width: 300px;
     transition: transform 0.2s;
   }
-  button.button:hover { transform: scale(1.05); }
+  button.button:hover {
+    transform: scale(1.05);
+  }
 
-  /* Formulario de solicitud acceso */
-  #requestAccess {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: 100vh; color: white;
-  }
-  #requestAccess input[type=email] {
-    padding: 0.8rem; font-size: 1.1rem; border-radius: 8px; border: none; margin-bottom: 1rem; width: 280px;
-  }
-  #requestAccess button {
-    padding: 1rem 2rem; font-size: 1.2rem; border-radius: 12px; border: none; cursor: pointer;
-  }
 </style>
 </head>
 <body>
 
-<!-- FORMULARIO DE SOLICITUD DE ACCESO -->
+<!-- PANTALLA DE SOLICITUD DE ACCESO -->
 <div id="requestAccess">
-  <h2>Solicitud de acceso a los tests</h2>
-  <p>Por favor, introduce tu correo para solicitar acceso:</p>
+  <h1>Solicitud de acceso</h1>
+  <p>Para acceder a los tests, rellena el formulario con tus datos.<br> Recibiré tu solicitud en mi correo y te enviaré acceso si lo apruebo.</p>
 
-  <form action="https://formspree.io/f/tu_id_formspree" method="POST" style="display:flex; flex-direction: column; align-items:center;">
-    <input type="email" name="email" placeholder="tuemail@ejemplo.com" required />
+  <form action="https://formspree.io/f/tu_id_formspree" method="POST" autocomplete="off">
+    <input type="email" name="email" placeholder="Correo electrónico" required />
+    <input type="text" name="username" placeholder="Nombre de usuario" required />
+    <input type="password" name="password" placeholder="Contraseña" required />
     <button type="submit">Enviar solicitud</button>
   </form>
 
-  <p style="margin-top:2rem; font-size:0.9rem; opacity:0.8;">
-    Recibirás un email con instrucciones para acceder.
-  </p>
+  <small>No compartas tu contraseña con nadie. Solo la usarás para acceso si te autorizo.</small>
 
-  <button onclick="grantAccess()">Ya tengo acceso</button>
+  <button class="btn-access" onclick="grantAccess()">Ya tengo acceso</button>
 </div>
 
-<!-- CONTENIDO PRINCIPAL (Tests) -->
-<div id="app" style="display:none; flex-direction: column; align-items: center; width: 100%; max-width: 900px;">
+<!-- CONTENIDO PRINCIPAL DE LA WEB -->
+<div id="app">
 
   <div id="menu">
     <h1>ChenkoTests: Oposiciones Bombero</h1>
@@ -150,15 +302,15 @@ GENERAL CRAVCHENKO
     <div class="timer" id="timer"></div>
     <div id="questionsContainer"></div>
     <div id="explanation"></div>
-    <button class="button" onclick="submitTest()">Finalizar test</button>
+    <button id="btnFinish" class="button" onclick="submitTest()">Finalizar test</button>
     <div id="result" style="display:none;"></div>
-    <button class="button" onclick="location.reload()">Reiniciar</button>
+    <button id="btnRestart" class="button" onclick="location.reload()" style="display:none;">Reiniciar</button>
   </div>
 
 </div>
 
 <script>
-  // PREGUNTAS DE EJEMPLO CON EXPLICACIONES
+  // Preguntas ejemplo (tú añadirás las tuyas o extraerás de PDFs)
   const preguntasMadrid = [
     {
       q: "¿Cuál es el color de la manguera tipo 1?",
@@ -210,20 +362,22 @@ GENERAL CRAVCHENKO
   let timeLeft = 0;
   let timerInterval;
 
-  // FUNCIONES
-
+  // Función para mostrar formulario o contenido
   function grantAccess() {
     document.getElementById('requestAccess').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
-    document.body.style.backgroundColor = '#b30000'; // Puedes ajustar o dejar el degradado
+    // Fondo azul neutro para test
+    document.body.style.background =
+      'radial-gradient(circle at 20% 30%, #003366cc, transparent 40%), radial-gradient(circle at 80% 80%, #0055cccc, transparent 40%), linear-gradient(135deg, #003366, #004080)';
   }
 
+  // Selección tipo test
   function selectTest(testType) {
     currentTestType = testType;
-    document.getElementById('menu').style.backgroundColor = testType === 'madrid' ? '#003366' : '#FFDD00';
     document.getElementById('afterTestSelect').style.display = 'flex';
   }
 
+  // Inicio del test
   function startTest() {
     const numQ = parseInt(document.getElementById('numQuestions').value);
     if (isNaN(numQ) || numQ < 1 || numQ > 5000) {
@@ -236,7 +390,7 @@ GENERAL CRAVCHENKO
 
     const allQuestions = currentTestType === 'madrid' ? preguntasMadrid : preguntasCadiz;
 
-    // En caso de que pidan más preguntas que disponibles, ajustamos:
+    // Ajustamos la cantidad a la disponible
     const maxAvailable = allQuestions.length;
     currentQuestions = allQuestions.slice(0, Math.min(numQ, maxAvailable));
 
@@ -248,13 +402,17 @@ GENERAL CRAVCHENKO
     document.getElementById('testSection').style.display = 'block';
     document.getElementById('result').style.display = 'none';
     document.getElementById('explanation').innerHTML = '';
-    document.body.style.backgroundColor = currentTestType === 'madrid' ? '#003366' : '#FFDD00';
+
+    document.getElementById('btnFinish').style.display = 'block';
+    document.getElementById('btnRestart').style.display = 'none';
+
     document.getElementById('testTitle').textContent = `Test ${currentTestType === 'madrid' ? 'Madrid' : 'Cádiz'} - Pregunta 1 de ${currentQuestions.length}`;
 
     startTimer();
     showQuestion();
   }
 
+  // Temporizador
   function startTimer() {
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
@@ -269,6 +427,7 @@ GENERAL CRAVCHENKO
     }, 1000);
   }
 
+  // Mostrar pregunta actual
   function showQuestion() {
     const qObj = currentQuestions[currentQuestionIndex];
     const container = document.getElementById('questionsContainer');
@@ -287,10 +446,11 @@ GENERAL CRAVCHENKO
     document.getElementById('explanation').innerHTML = '';
   }
 
+  // Responder pregunta
   function selectAnswer(selectedIndex) {
     const qObj = currentQuestions[currentQuestionIndex];
     const labels = document.querySelectorAll('.option-label');
-    
+
     if(currentMode === 'exam') {
       if(selectedIndex === qObj.correct) score++;
       nextQuestion();
@@ -305,7 +465,7 @@ GENERAL CRAVCHENKO
 
       document.getElementById('explanation').textContent = qObj.explanation;
 
-      // Deshabilitar inputs para que no cambien
+      // Deshabilitar inputs para evitar cambios
       const inputs = document.querySelectorAll('input[name="answer"]');
       inputs.forEach(i => i.disabled = true);
 
@@ -313,37 +473,39 @@ GENERAL CRAVCHENKO
     }
   }
 
+  // Avanzar pregunta o finalizar test
   function nextQuestion() {
     currentQuestionIndex++;
     if(currentQuestionIndex >= currentQuestions.length) {
       submitTest();
       return;
     }
-    document.getElementById('testTitle').textContent = `Test ${currentTestType === 'madrid' ? 'Madrid' : 'Cádiz'} - Pregunta ${currentQuestionIndex+1} de ${currentQuestions.length}`;
+    document.getElementById('testTitle').textContent = `Test ${currentTestType === 'madrid' ? 'Madrid' : 'Cádiz'} - Pregunta ${currentQuestionIndex + 1} de ${currentQuestions.length}`;
     showQuestion();
   }
 
+  // Finalizar test y mostrar resultado
   function submitTest() {
     clearInterval(timerInterval);
     document.getElementById('questionsContainer').innerHTML = '';
     document.getElementById('explanation').innerHTML = '';
     document.getElementById('timer').textContent = '';
-    document.getElementById('testTitle').textContent = 'Resultado final';
-
-    const total = currentQuestions.length;
-    const percent = Math.round((score / total) * 100);
-
-    let color = '#ff5555';
-    if (percent >= 80) color = '#00ff99';
-    else if (percent >= 50) color = '#ffcc00';
 
     const resultDiv = document.getElementById('result');
-    resultDiv.style.color = color;
-    resultDiv.style.display = 'block';
-    resultDiv.textContent = `Has acertado ${score} de ${total} preguntas (${percent}%).`;
+    const percentage = Math.round((score / currentQuestions.length) * 100);
+    let color = 'white';
 
-    // Mostrar botón reiniciar
-    document.querySelector('button[onclick="location.reload()"]').style.display = 'block';
+    if (percentage >= 90) color = '#4CAF50'; // verde
+    else if (percentage >= 70) color = '#FFC107'; // amarillo
+    else color = '#F44336'; // rojo
+
+    resultDiv.style.display = 'block';
+    resultDiv.style.color = color;
+    resultDiv.textContent = `Has acertado ${score} de ${currentQuestions.length} preguntas (${percentage}%).`;
+
+    // Ocultar botón finalizar y mostrar reiniciar
+    document.getElementById('btnFinish').style.display = 'none';
+    document.getElementById('btnRestart').style.display = 'block';
   }
 </script>
 
