@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "temario": "General",
+    "tema": "Teoría del Fuego",
+    "pregunta": "¿Cuál es el componente del tetraedro del fuego que, al eliminarlo, provoca la extinción por sofocación?",
+    "opciones": {
+      "a": "Combustible",
+      "b": "Comburente (Oxígeno)",
+      "c": "Energía de activación (Calor)",
+      "d": "Reacción en cadena"
+    },
+    "respuesta_correcta": "b",
+    "justificacion": "La sofocación es el método de extinción que consiste en eliminar o reducir la concentración del comburente, generalmente el oxígeno del aire."
+  },
+  {
+    "id": 2,
+    "temario": "General",
+    "tema": "Vehículos de extinción",
+    "pregunta": "¿Cómo se denomina el vehículo de bomberos diseñado principalmente para trabajos en altura?",
+    "opciones": {
+      "a": "Bomba Urbana Pesada (BUP)",
+      "b": "Bomba Rural Pesada (BRP)",
+      "c": "Autoescala Automática (AEA)",
+      "d": "Unidad de Soporte Vital (USV)"
+    },
+    "respuesta_correcta": "c",
+    "justificacion": "La Autoescala Automática (AEA) es el vehículo que dispone de una escalera extensible para alcanzar alturas elevadas en rescates o para la extinción desde el exterior."
+  }
+]
