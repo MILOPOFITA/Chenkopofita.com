@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco de Preguntas - ChenkoTests</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="banco-body">
+
+    <div id="banco-container">
+        <header id="banco-header">
+            <a href="index.html" class="btn-nav">← Volver al Inicio</a>
+            <h1>Banco de Preguntas</h1>
+            <p>Busca por texto o filtra por preguntas marcadas.</p>
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="Buscar por texto, tema, fuente...">
+            </div>
+            <div id="filter-controls">
+                <label>
+                    <input type="radio" name="filter" value="todas" checked> Todas
+                </label>
+                <label>
+                    <input type="radio" name="filter" value="marcadas"> Solo Marcadas
+                </label>
+            </div>
+        </header>
+        
+        <main id="lista-preguntas">
+            </main>
+    </div>
+
+    <script src="banco.js"></script>
+</body>
+</html>
